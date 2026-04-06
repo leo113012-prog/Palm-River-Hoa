@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homeowner Registration – Palm River Subdivision HOA</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #1B2D4F;
+    --navy2:  #2A4370;
+    --gold:   #C9963A;
+    --gold-lt:#F5E9D0;
+    --cream:  #FBF8F3;
+    --white:  #FFFFFF;
+    --text:   #1B2D4F;
+    --muted:  #6B7C9A;
+    --border: #D8E0EC;
+    --error:  #C0392B;
+    --success:#2E7D52;
+    --radius: 12px;
+    --shadow: 0 4px 24px rgba(27,45,79,0.10);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── hero header ── */
+  .hero {
+    background: var(--navy);
+    padding: 48px 24px 72px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    border: 60px solid rgba(201,150,58,0.12);
+    top: -120px; right: -80px;
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    border: 40px solid rgba(201,150,58,0.08);
+    bottom: -80px; left: -50px;
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(201,150,58,0.18);
+    color: #F0C97A;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 5vw, 40px);
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.65);
+    font-size: 15px;
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .hero-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  /* ── card ── */
+  .card-wrap {
+    max-width: 620px;
+    margin: -36px auto 48px;
+    padding: 0 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .card {
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 40px 40px 36px;
+    border: 1px solid var(--border);
+  }
+  @media (max-width: 560px) {
+    .card { padding: 28px 20px 24px; }
+  }
+
+  /* ── section divider ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 28px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gold-lt);
+  }
+
+  /* ── field ── */
+  .field { margin-bottom: 20px; }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+  .field label .req {
+    color: var(--gold);
+    margin-left: 3px;
+    font-size: 15px;
+    line-height: 1;
+    vertical-align: middle;
+  }
+  .field label .opt {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    margin-left: 6px;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 13px 16px;
+    outline: none;
+    transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder { color: #A8B4C8; }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--navy2);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(42,67,112,0.10);
+  }
+  .field input.error,
+  .field select.error { border-color: var(--error); }
+  .field .err-msg {
+    font-size: 12px;
+    color: var(--error);
+    margin-top: 5px;
+    display: none;
+  }
+  .field.has-error .err-msg { display: block; }
+
+  .field textarea { resize: vertical; min-height: 96px; }
+
+  /* select arrow */
+  .select-wrap { position: relative; }
+  .select-wrap::after {
+    content: '';
+    position: absolute;
+    right: 16px; top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--muted);
+    pointer-events: none;
+  }
+
+  /* ── row grid ── */
+  .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 440px) {
+    .row-2 { grid-template-columns: 1fr; }
+  }
+
+  /* ── radio toggle ── */
+  .toggle-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .toggle-group input[type="radio"] { display: none; }
+  .toggle-group label {
+    flex: 1;
+    min-width: 110px;
+    text-align: center;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    background: var(--cream);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.16s;
+    margin-bottom: 0;
+  }
+  .toggle-group input[type="radio"]:checked + label {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+  .toggle-group label:hover { border-color: var(--navy2); color: var(--navy); }
+
+  /* ── submit button ── */
+  .btn-submit {
+    width: 100%;
+    margin-top: 28px;
+    padding: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--white);
+    background: var(--navy);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.18s, transform 0.12s;
+    letter-spacing: 0.02em;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-submit:hover { background: var(--navy2); }
+  .btn-submit:active { transform: scale(0.985); }
+
+  /* ── success screen ── */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 20px 0 8px;
+  }
+  .success-screen .check-circle {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: #E8F5EE;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 32px;
+  }
+  .success-screen h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+  .success-screen p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 340px;
+    margin: 0 auto 24px;
+  }
+  .summary-box {
+    background: var(--cream);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .summary-box span { color: var(--muted); font-size: 12px; display: block; }
+  .summary-box strong { font-weight: 500; }
+  .btn-new {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 11px 24px;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--navy);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-new:hover { background: var(--cream); }
+
+  /* ── footer note ── */
+  .foot-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+  .foot-note a { color: var(--navy); text-decoration: none; }
+
+  /* animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card { animation: fadeUp 0.45s ease both; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="hero-icon">🏡</span>
+  <div class="hero-badge">Homeowners Association</div>
+  <h1>Palm River Subdivision</h1>
+  <p style="color:rgba(255,255,255,0.80);font-size:14px;font-weight:500;margin-bottom:4px;letter-spacing:0.03em;">HOME OWNER'S ASSOCIATION</p>
+  <p style="color:rgba(255,255,255,0.45);font-size:12px;margin-bottom:18px;">Resident Registration Form</p>
+  <p>Please fill in your details below. Fields marked with <strong style="color:#F0C97A;">★</strong> are required.</p>
+</div>
+
+<div class="card-wrap">
+  <div class="card">
+
+    <!-- FORM -->
+    <form id="hoa-form" novalidate>
+
+      <div class="section-label">Personal Information</div>
+
+      <div class="field" id="f-name">
+        <label for="fullname">Full Name <span class="req">★</span></label>
+        <input type="text" id="fullname" name="fullname" placeholder="e.g. Juan dela Cruz" autocomplete="name">
+        <div class="err-msg">Please enter your full name.</div>
+      </div>
+
+      <div class="field" id="f-address">
+        <label for="address">Complete Address <span class="req">★</span></label>
+        <input type="text" id="address" name="address" placeholder="e.g. 123 Palm Street, Palm River Subdivision" autocomplete="street-address">
+        <div class="err-msg">Please enter your complete address.</div>
+      </div>
+
+      <div class="section-label">Property Details</div>
+
+      <div class="row-2">
+        <div class="field" id="f-block">
+          <label for="block">Block Number <span class="req">★</span></label>
+          <div class="select-wrap">
+            <select id="block" name="block">
+              <option value="">Select block…</option>
+              <option>Block 1</option>
+              <option>Block 2</option>
+              <option>Block 3</option>
+              <option>Block 4</option>
+              <option>Block 5</option>
+              <option>Block 6</option>
+              <option>Block 7</option>
+              <option>Block 8</option>
+              <option>Block 9</option>
+              <option>Block 10</option>
+              <option>Block 11</option>
+            </select>
+          </div>
+          <div class="err-msg">Please select your block number.</div>
+        </div>
+
+        <div class="field" id="f-lot">
+          <label for="lot">Lot Number <span class="req">★</span></label>
+          <input type="text" id="lot" name="lot" placeholder="e.g. Lot 12">
+          <div class="err-msg">Please enter your lot number.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Resident Type <span class="req">★</span></label>
+        <div class="toggle-group">
+          <input type="radio" id="r-owner" name="restype" value="Owner">
+          <label for="r-owner">🏠&nbsp; Owner</label>
+          <input type="radio" id="r-renter" name="restype" value="Renter">
+          <label for="r-renter">🔑&nbsp; Renter</label>
+        </div>
+      </div>
+
+      <div class="section-label">Contact Information</div>
+
+      <div class="field">
+        <label for="contact">Contact Number <span class="opt">(recommended)</span></label>
+        <input type="tel" id="contact" name="contact" placeholder="e.g. 09171234567" autocomplete="tel">
+      </div>
+
+      <div class="field">
+        <label for="email">Email Address <span class="opt">(optional)</span></label>
+        <input type="email" id="email" name="email" placeholder="e.g. juan@email.com" autocomplete="email">
+      </div>
+
+      <div class="section-label">Message</div>
+
+      <div class="field">
+        <label for="comment">Comments or Concerns <span class="opt">(optional)</span></label>
+        <textarea id="comment" name="comment" placeholder="Leave a message, concern, or request for the HOA…"></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit">Submit Registration →</button>
+
+    </form>
+
+    <!-- SUCCESS SCREEN (hidden by default) -->
+    <div class="success-screen" id="success-screen">
+      <div class="check-circle">✅</div>
+      <h2>Registration Received!</h2>
+      <p>Thank you for registering. Your information has been submitted to the HOA.</p>
+      <div class="summary-box" id="summary-box"></div>
+      <button class="btn-new" onclick="resetForm()">Submit another entry</button>
+    </div>
+
+  </div>
+
+  <p class="foot-note">
+    Your information is collected solely for HOA records.<br>
+    For concerns, contact your HOA Secretary.
+  </p>
+</div>
+
+<script>
+const form = document.getElementById('hoa-form');
+const successScreen = document.getElementById('success-screen');
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  if (!validate()) return;
+
+  const name    = document.getElementById('fullname').value.trim();
+  const block   = document.getElementById('block').value;
+  const lot     = document.getElementById('lot').value.trim();
+  const contact = document.getElementById('contact').value.trim();
+  const email   = document.getElementById('email').value.trim();
+  const restype = document.querySelector('input[name="restype"]:checked');
+  const comment = document.getElementById('comment').value.trim();
+
+  const rows = [
+    ['Name',         name],
+    ['Address',      document.getElementById('address').value.trim() || '—'],
+    ['Block',        block],
+    ['Lot',          lot],
+    ['Resident Type',restype ? restype.value : '—'],
+    ['Contact',      contact || '—'],
+    ['Email',        email   || '—'],
+    ['Comments',     comment || '—'],
+  ];
+
+  document.getElementById('summary-box').innerHTML = rows.map(([k,v]) =>
+    `<span>${k}</span><strong>${v}</strong>`
+  ).join('');
+
+  form.style.display = 'none';
+  successScreen.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+function validate() {
+  let ok = true;
+
+  const checks = [
+    ['f-name',  'fullname',  v => v.trim().length > 1],
+    ['f-block', 'block',     v => v !== ''],
+    ['f-lot',   'lot',       v => v.trim().length > 0],
+    ['f-address','address',  v => v.trim().length > 3],
+  ];
+
+  checks.forEach(([fieldId, inputId, test]) => {
+    const el  = document.getElementById(inputId);
+    const fld = document.getElementById(fieldId);
+    if (!test(el.value)) {
+      fld.classList.add('has-error');
+      el.classList.add('error');
+      ok = false;
+    } else {
+      fld.classList.remove('has-error');
+      el.classList.remove('error');
+    }
+  });
+
+  return ok;
+}
+
+['fullname','block','lot','address'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => {
+    el.classList.remove('error');
+    el.closest('.field').classList.remove('has-error');
+  });
+});
+
+function resetForm() {
+  form.reset();
+  form.style.display = 'block';
+  successScreen.style.display = 'none';
+}
+</script>
+</body>
+</html>
